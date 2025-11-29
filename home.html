@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaLink Jiménez - Usuario</title>
+  <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio">Inicio</a></li>
+        <li><a href="#" id="reservas">Reservas</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <img src="archivos/perfil.png" id="btnPerfil" class="foto-perfil-home">
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+
+  <main>
+
+
+    <section class="buscador">
+      <div class="buscar-container">
+
+        <div class="input-group">
+          <label>Origen</label>
+          <input type="text" value="Puerto Jiménez">
+        </div>
+
+        <div class="input-group">
+          <label>Destino</label>
+          <input type="text" value="Golfito">
+        </div>
+
+        <div class="input-group">
+          <label>Fecha Ida</label>
+          <input type="date" id="fechaIda">
+        </div>
+
+        <div class="input-group">
+          <label>Fecha Vuelta (Opcional)</label>
+          <input type="date">
+        </div>
+
+        <button class="btn-buscar">Buscar</button>
+      </div>
+    </section>
+
+
+   
+    <section class="titulo-ruta">
+      <h1>Puerto Jiménez - Golfito</h1>
+
+      <div class="fechas" id="semana">
+        <span data-dia="lunes">Lun</span>
+        <span data-dia="martes">Mar</span>
+        <span data-dia="miercoles">Mié</span>
+        <span data-dia="jueves">Jue</span>
+        <span data-dia="viernes">Vie</span>
+        <span data-dia="sabado">Sáb</span>
+        <span data-dia="domingo">Dom</span>
+      </div>
+    </section>
+
+   
+    <div class="tarjetas-horarios" id="contenedorTarjetas"></div>
+
+  </main>
+
+
+
+<script>
+  const { ipcRenderer } = require("electron");
+
+
+  document.getElementById("logout").addEventListener("click", () => {
+    ipcRenderer.send("logout");
+  });
+
+  document.getElementById("btnPerfil").addEventListener("click", () => {
+    ipcRenderer.send("open-profile");
+  });
+
+  document.getElementById("reservas").addEventListener("click", () => {
+    ipcRenderer.send("abrir-reservas");
+  });
+
+  document.getElementById("inicio").addEventListener("click", () => {
+    ipcRenderer.send("abrir-inicio");
+  });
+
+
+
+  const horarios = {
+    lunes: { ida: ["06:15 A.M.", "07:45 A.M."], vuelta: ["07:00 A.M.", "10:00 A.M."] },
+    martes: { ida: ["06:15 A.M.", "07:45 A.M."], vuelta: ["07:00 A.M.", "10:00 A.M."] },
+    miercoles: { ida: ["06:15 A.M.", "07:45 A.M."], vuelta: ["07:00 A.M.", "10:00 A.M."] },
+    jueves: { ida: ["06:15 A.M.", "07:45 A.M."], vuelta: ["07:00 A.M.", "10:00 A.M."] },
+    viernes: { ida: ["06:15 A.M.", "07:45 A.M."], vuelta: ["07:00 A.M.", "10:00 A.M."] },
+    sabado: { ida: ["07:00 A.M.", "09:30 A.M."], vuelta: ["08:00 A.M.", "11:00 A.M."] },
+    domingo: { ida: ["No hay servicio"], vuelta: ["No hay servicio"] }
+  };
+
+  const dias = document.querySelectorAll(".fechas span");
+  const contenedorTarjetas = document.getElementById("contenedorTarjetas");
+
+  dias.forEach(dia => {
+    dia.addEventListener("click", () => {
+
+      dias.forEach(d => d.classList.remove("active"));
+      dia.classList.add("active");
+
+      const info = horarios[dia.dataset.dia];
+
+      contenedorTarjetas.innerHTML = `
+        <div class="card-horario" onclick="abrirReserva()">
+          <img src="archivos/puerto_jimenez.jpeg" class="img-horario">
+          <h3>Puerto Jiménez - Golfito</h3>
+          ${info.ida.map(h => `<p>${h}</p>`).join("")}
+        </div>
+
+        <div class="card-horario" onclick="abrirReserva()">
+          <img src="archivos/Principal2022MuelleGolfito.jpg" class="img-horario">
+          <h3>Golfito - Puerto Jiménez</h3>
+          ${info.vuelta.map(h => `<p>${h}</p>`).join("")}
+        </div>
+      `;
+    });
+  });
+
+  function abrirReserva() {
+    ipcRenderer.send("abrir-reservas");
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AquaLink Jiménez</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="archivos/barco.webp" alt="logo" class="logo-img" />
+      <div class="logo">AquaLink Jiménez</div>
+      <button id="learnMore">Más información</button>
+    </div>
+
+    <div class="right">
+      <h2>¡Bienvenido!</h2>
+      <p>Inicia sesión para continuar</p>
+
+      <form id="loginForm">
+        <input type="text" id="email" placeholder="Correo electrónico" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <button type="submit">Iniciar sesión</button>
+
+        <div class="extra">
+          <label><input type="checkbox" /> Recordarme</label>
+          <a id="forgotPass">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+
+      <p class="bottom-text">¿No tienes cuenta? <a id="goRegister">Regístrate</a></p>
+    </div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    // --- Manejo del login ---
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (email === 'admin@lancha.com' && password === '1234') {
+        ipcRenderer.send('login-success', 'admin');
+      } else if (email === 'user@lancha.com' && password === '1234') {
+        ipcRenderer.send('login-success', 'user');
+      } else {
+        alert('Credenciales incorrectas');
+      }
+    });
+
+  
+    document.getElementById('goRegister').addEventListener('click', () => {
+      ipcRenderer.send('open-register');
+    });
+
+    
+    document.getElementById('forgotPass').addEventListener('click', () => {
+      ipcRenderer.send('open-recover');
+    });
+  </script>
+</body>
+</html>

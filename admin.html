@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaLink Jiménez - Administrador</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio" class="active">Panel Principal</a></li>
+        <li><a href="#" id="gestionViajes">Gestión de Viajes</a></li>
+        <li><a href="#" id="gestionUsuarios">Gestión de Usuarios</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <span class="admin-badge">Administrador</span>
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+
+  <main>
+    
+    <!-- VISTA PANEL PRINCIPAL -->
+    <section id="vistaInicio" class="vista-activa">
+      <div class="bienvenida">
+        <h1>Panel de Administración</h1>
+        <p>Bienvenido al sistema de gestión de AquaLink Jiménez</p>
+      </div>
+
+      <div class="estadisticas">
+        <div class="stat-card">
+          <div class="stat-icon">🚢</div>
+          <div class="stat-info">
+            <h3>12</h3>
+            <p>Viajes Activos</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <h3>48</h3>
+            <p>Usuarios Registrados</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-info">
+            <h3>23</h3>
+            <p>Reservas Hoy</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <h3>₡80,500</h3>
+            <p>Ingresos Hoy</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="actividad-reciente">
+        <h2>Actividad Reciente</h2>
+        <div class="tabla-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Acción</th>
+                <th>Ruta</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Diego Salazar</td>
+                <td>Nueva Reserva</td>
+                <td>Puerto Jiménez → Golfito</td>
+                <td>27/11/2025 - 08:30</td>
+                <td><span class="badge badge-success">Confirmada</span></td>
+              </tr>
+              <tr>
+                <td>María González</td>
+                <td>Cancelación</td>
+                <td>Golfito → Puerto Jiménez</td>
+                <td>27/11/2025 - 07:15</td>
+                <td><span class="badge badge-danger">Cancelada</span></td>
+              </tr>
+              <tr>
+                <td>Carlos Ramírez</td>
+                <td>Nueva Reserva</td>
+                <td>Puerto Jiménez → Golfito</td>
+                <td>26/11/2025 - 18:45</td>
+                <td><span class="badge badge-success">Confirmada</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- VISTA GESTIÓN DE VIAJES -->
+    <section id="vistaViajes" class="vista-oculta">
+      <div class="seccion-header">
+        <h1>Gestión de Viajes</h1>
+        <button class="btn-principal" id="btnAgregarViaje">+ Agregar Viaje</button>
+      </div>
+
+      <div class="filtros">
+        <input type="text" placeholder="Buscar viaje..." class="input-buscar">
+        <select class="select-filtro">
+          <option>Todos los estados</option>
+          <option>Activos</option>
+          <option>Inactivos</option>
+        </select>
+        <select class="select-filtro">
+          <option>Todas las rutas</option>
+          <option>Puerto Jiménez → Golfito</option>
+          <option>Golfito → Puerto Jiménez</option>
+        </select>
+      </div>
+
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ruta</th>
+              <th>Horario</th>
+              <th>Precio</th>
+              <th>Capacidad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaViajes">
+            <tr>
+              <td>#001</td>
+              <td>Puerto Jiménez → Golfito</td>
+              <td>06:15 AM</td>
+              <td>₡3,500</td>
+              <td>40/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>Golfito → Puerto Jiménez</td>
+              <td>10:00 AM</td>
+              <td>₡3,500</td>
+              <td>35/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>Puerto Jiménez → Golfito</td>
+              <td>02:30 PM</td>
+              <td>₡3,500</td>
+              <td>28/50</td>
+              <td><span class="badge badge-warning">Pendiente</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- VISTA GESTIÓN DE USUARIOS -->
+    <section id="vistaUsuarios" class="vista-oculta">
+      <div class="seccion-header">
+        <h1>Gestión de Usuarios</h1>
+        <button class="btn-principal" id="btnAgregarUsuario">+ Agregar Usuario</button>
+      </div>
+
+      <div class="filtros">
+        <input type="text" placeholder="Buscar usuario..." class="input-buscar">
+        <select class="select-filtro">
+          <option>Todos los roles</option>
+          <option>Administradores</option>
+          <option>Usuarios</option>
+        </select>
+        <select class="select-filtro">
+          <option>Todos los estados</option>
+          <option>Activos</option>
+          <option>Inactivos</option>
+        </select>
+      </div>
+
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaUsuarios">
+            <tr>
+              <td>#001</td>
+              <td>Diego Salazar Campos</td>
+              <td>user@lancha.com</td>
+              <td>8888-8888</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>María González</td>
+              <td>maria.g@example.com</td>
+              <td>8777-7777</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>Administrador</td>
+              <td>admin@lancha.com</td>
+              <td>8999-9999</td>
+              <td><span class="badge badge-primary">Admin</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar">✎</button>
+                <button class="btn-accion btn-eliminar">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Modal para agregar/editar viaje -->
+  <div id="modalViaje" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Agregar Nuevo Viaje</h2>
+      <form id="formViaje">
+        <div class="form-group">
+          <label>Origen</label>
+          <input type="text" required placeholder="Puerto Jiménez">
+        </div>
+        <div class="form-group">
+          <label>Destino</label>
+          <input type="text" required placeholder="Golfito">
+        </div>
+        <div class="form-group">
+          <label>Horario</label>
+          <input type="time" required>
+        </div>
+        <div class="form-group">
+          <label>Precio (₡)</label>
+          <input type="number" required placeholder="3500">
+        </div>
+        <div class="form-group">
+          <label>Capacidad</label>
+          <input type="number" required placeholder="50">
+        </div>
+        <button type="submit" class="btn-principal">Guardar Viaje</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Modal para agregar/editar usuario -->
+  <div id="modalUsuario" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Agregar Nuevo Usuario</h2>
+      <form id="formUsuario">
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" required>
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" required>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" required>
+        </div>
+        <div class="form-group">
+          <label>Rol</label>
+          <select required>
+            <option>Usuario</option>
+            <option>Administrador</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-principal">Guardar Usuario</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    // Navegación entre páginas
+    document.getElementById('inicio').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    document.getElementById('gestionViajes').addEventListener('click', () => {
+      ipcRenderer.send('abrir-gestion-viajes');
+    });
+
+    document.getElementById('gestionUsuarios').addEventListener('click', () => {
+      ipcRenderer.send('abrir-gestion-usuarios');
+    });
+
+    // Cerrar sesión
+    document.getElementById('logout').addEventListener('click', () => {
+      ipcRenderer.send('logout');
+    });
+
+    // Modales
+    const modalViaje = document.getElementById('modalViaje');
+    const modalUsuario = document.getElementById('modalUsuario');
+
+    document.getElementById('btnAgregarViaje').addEventListener('click', () => {
+      modalViaje.style.display = 'block';
+    });
+
+    document.getElementById('btnAgregarUsuario').addEventListener('click', () => {
+      modalUsuario.style.display = 'block';
+    });
+
+    // Cerrar modales
+    document.querySelectorAll('.close').forEach(closeBtn => {
+      closeBtn.addEventListener('click', function() {
+        this.closest('.modal').style.display = 'none';
+      });
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+      }
+    });
+
+    // Formularios
+    document.getElementById('formViaje').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Viaje agregado exitosamente');
+      modalViaje.style.display = 'none';
+    });
+
+    document.getElementById('formUsuario').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Usuario agregado exitosamente');
+      modalUsuario.style.display = 'none';
+    });
+
+    // Acciones de tabla
+    document.querySelectorAll('.btn-editar').forEach(btn => {
+      btn.addEventListener('click', function() {
+        alert('Función de edición en desarrollo');
+      });
+    });
+
+    document.querySelectorAll('.btn-eliminar').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (confirm('¿Está seguro de que desea eliminar este elemento?')) {
+          this.closest('tr').remove();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

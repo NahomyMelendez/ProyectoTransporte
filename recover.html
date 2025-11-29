@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recuperar contraseña - AquaLink Jiménez</title>
+  <link rel="stylesheet" href="css/recover.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="archivos/barco.webp" alt="logo" class="logo-img" />
+      <div class="logo">AquaLink Jiménez</div>
+      <button id="learnMore">Más información</button>
+    </div>
+
+    <div class="right">
+      <h2>Recuperar contraseña</h2>
+      <p>Ingresa tu correo electrónico para restablecer tu contraseña</p>
+
+      <form id="recoverForm">
+        <input type="email" id="email" placeholder="Correo electrónico" required />
+        <button type="submit">Enviar enlace de recuperación</button>
+      </form>
+
+      <p class="bottom-text">¿Recordaste tu contraseña? <a id="goLogin">Inicia sesión</a></p>
+    </div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    document.getElementById('recoverForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      if (!email) {
+        alert('Por favor, ingresa un correo válido');
+        return;
+      }
+      alert('Se ha enviado un enlace de recuperación a ' + email);
+      ipcRenderer.send('go-login');
+    });
+
+    document.getElementById('goLogin').addEventListener('click', () => {
+      ipcRenderer.send('go-login');
+    });
+  </script>
+</body>
+</html>

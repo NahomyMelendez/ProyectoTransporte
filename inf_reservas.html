@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaLink Jiménez - Reservas</title>
+  <link rel="stylesheet" href="css/inf_reservas.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio">Inicio</a></li>
+        <li><a href="#" id="reservas">Reservas</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <img src="archivos/perfil.png" id="btnPerfil" class="foto-perfil-home">
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="contenedor-reserva">
+
+    <h1>Reservar Viaje</h1>
+
+    <div class="tarjeta-reserva">
+
+      <h2 id="tituloRuta">Puerto Jiménez → Golfito</h2>
+
+      <div class="info-reserva">
+        <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+        <p><strong>Horario:</strong> <span id="hora"></span></p>
+      </div>
+
+      <h3>Información del pasajero</h3>
+
+      <div class="formulario">
+
+        <div class="input-group">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre">
+        </div>
+
+        <div class="input-group">
+          <label>Número de teléfono</label>
+          <input type="text" id="telefono">
+        </div>
+
+        <div class="input-group">
+          <label>Cantidad de boletos</label>
+          <input type="number" id="cantBoletos" value="1" min="1">
+        </div>
+
+      </div>
+
+      <button class="btn-confirmar" id="confirmarReserva">Confirmar Reserva</button>
+
+    </div>
+
+  </main>
+
+
+  
+  <script>
+    const { ipcRenderer } = require("electron");
+
+
+    document.getElementById("logout").addEventListener("click", () => {
+      ipcRenderer.send("logout");
+    });
+
+    document.getElementById("inicio").addEventListener("click", () => {
+      ipcRenderer.send("abrir-inicio");
+    });
+
+    document.getElementById("btnPerfil").addEventListener("click", () => {
+      ipcRenderer.send("open-profile");
+    });
+
+    document.getElementById("reservas").addEventListener("click", () => {
+      ipcRenderer.send("abrir-reservas");
+    });
+
+    
+    document.getElementById("confirmarReserva").addEventListener("click", () => {
+      alert("Reserva realizada con éxito (simulación)");
+    });
+  </script>
+
+</body>
+</html>

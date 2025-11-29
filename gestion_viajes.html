@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaLink Jiménez - Gestión de Viajes</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio">Panel Principal</a></li>
+        <li><a href="#" id="gestionViajes" class="active">Gestión de Viajes</a></li>
+        <li><a href="#" id="gestionUsuarios">Gestión de Usuarios</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <span class="admin-badge">Administrador</span>
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+
+  <main>
+    
+    <!-- VISTA GESTIÓN DE VIAJES -->
+    <section id="vistaViajes" class="vista-activa">
+      <div class="seccion-header">
+        <h1>Gestión de Viajes</h1>
+        <button class="btn-principal" id="btnAgregarViaje">+ Agregar Viaje</button>
+      </div>
+
+      <div class="filtros">
+        <input type="text" placeholder="Buscar viaje..." class="input-buscar" id="buscarViaje">
+        <select class="select-filtro" id="filtroEstado">
+          <option>Todos los estados</option>
+          <option>Activos</option>
+          <option>Inactivos</option>
+          <option>Pendientes</option>
+        </select>
+        <select class="select-filtro" id="filtroRuta">
+          <option>Todas las rutas</option>
+          <option>Puerto Jiménez → Golfito</option>
+          <option>Golfito → Puerto Jiménez</option>
+        </select>
+      </div>
+
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ruta</th>
+              <th>Horario</th>
+              <th>Precio</th>
+              <th>Capacidad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaViajes">
+            <tr>
+              <td>#001</td>
+              <td>Puerto Jiménez → Golfito</td>
+              <td>06:15 AM</td>
+              <td>₡3,500</td>
+              <td>40/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarViaje(1)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>Golfito → Puerto Jiménez</td>
+              <td>10:00 AM</td>
+              <td>₡3,500</td>
+              <td>35/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarViaje(2)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>Puerto Jiménez → Golfito</td>
+              <td>02:30 PM</td>
+              <td>₡3,500</td>
+              <td>28/50</td>
+              <td><span class="badge badge-warning">Pendiente</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarViaje(3)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#004</td>
+              <td>Golfito → Puerto Jiménez</td>
+              <td>03:00 PM</td>
+              <td>₡3,500</td>
+              <td>45/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarViaje(4)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#005</td>
+              <td>Puerto Jiménez → Golfito</td>
+              <td>05:45 PM</td>
+              <td>₡3,500</td>
+              <td>20/50</td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarViaje(5)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Modal para agregar/editar viaje -->
+  <div id="modalViaje" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="tituloModal">Agregar Nuevo Viaje</h2>
+      <form id="formViaje">
+        <div class="form-group">
+          <label>Origen</label>
+          <input type="text" id="origen" required placeholder="Puerto Jiménez">
+        </div>
+        <div class="form-group">
+          <label>Destino</label>
+          <input type="text" id="destino" required placeholder="Golfito">
+        </div>
+        <div class="form-group">
+          <label>Horario</label>
+          <input type="time" id="horario" required>
+        </div>
+        <div class="form-group">
+          <label>Precio (₡)</label>
+          <input type="number" id="precio" required placeholder="3500">
+        </div>
+        <div class="form-group">
+          <label>Capacidad</label>
+          <input type="number" id="capacidad" required placeholder="50">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="estado" required>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+            <option value="Pendiente">Pendiente</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-principal">Guardar Viaje</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    // Navegación
+    document.getElementById('inicio').addEventListener('click', () => {
+      ipcRenderer.send('go-admin');
+    });
+
+    document.getElementById('gestionViajes').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    document.getElementById('gestionUsuarios').addEventListener('click', () => {
+      ipcRenderer.send('abrir-gestion-usuarios');
+    });
+
+    // Cerrar sesión
+    document.getElementById('logout').addEventListener('click', () => {
+      ipcRenderer.send('logout');
+    });
+
+    // Modal
+    const modalViaje = document.getElementById('modalViaje');
+
+    document.getElementById('btnAgregarViaje').addEventListener('click', () => {
+      document.getElementById('tituloModal').textContent = 'Agregar Nuevo Viaje';
+      document.getElementById('formViaje').reset();
+      modalViaje.style.display = 'block';
+    });
+
+    // Cerrar modal
+    document.querySelector('.close').addEventListener('click', () => {
+      modalViaje.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modalViaje) {
+        modalViaje.style.display = 'none';
+      }
+    });
+
+    // Formulario
+    document.getElementById('formViaje').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const origen = document.getElementById('origen').value;
+      const destino = document.getElementById('destino').value;
+      const horario = document.getElementById('horario').value;
+      const precio = document.getElementById('precio').value;
+      const capacidad = document.getElementById('capacidad').value;
+      const estado = document.getElementById('estado').value;
+
+      // Generar nuevo ID
+      const tablaViajes = document.getElementById('tablaViajes');
+      const numViajes = tablaViajes.rows.length + 1;
+      const nuevoId = `#${String(numViajes).padStart(3, '0')}`;
+
+      // Determinar badge de estado
+      let badgeClass = 'badge-success';
+      if (estado === 'Inactivo') badgeClass = 'badge-danger';
+      if (estado === 'Pendiente') badgeClass = 'badge-warning';
+
+      // Crear nueva fila
+      const nuevaFila = `
+        <tr>
+          <td>${nuevoId}</td>
+          <td>${origen} → ${destino}</td>
+          <td>${convertirHora(horario)}</td>
+          <td>₡${formatearPrecio(precio)}</td>
+          <td>0/${capacidad}</td>
+          <td><span class="badge ${badgeClass}">${estado}</span></td>
+          <td>
+            <button class="btn-accion btn-editar" onclick="editarViaje(${numViajes})">✎</button>
+            <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
+          </td>
+        </tr>
+      `;
+
+      tablaViajes.insertAdjacentHTML('beforeend', nuevaFila);
+      modalViaje.style.display = 'none';
+      alert('Viaje agregado exitosamente');
+    });
+
+    // Función para editar viaje
+    function editarViaje(id) {
+      document.getElementById('tituloModal').textContent = 'Editar Viaje';
+      modalViaje.style.display = 'block';
+      // Aquí podrías cargar los datos del viaje para editarlos
+      alert(`Editando viaje #${id}. Función en desarrollo.`);
+    }
+
+    // Función para eliminar viaje
+    function eliminarViaje(btn) {
+      if (confirm('¿Está seguro de que desea eliminar este viaje?')) {
+        btn.closest('tr').remove();
+        alert('Viaje eliminado exitosamente');
+      }
+    }
+
+    // Función para convertir hora a formato AM/PM
+    function convertirHora(hora24) {
+      const [horas, minutos] = hora24.split(':');
+      const h = parseInt(horas);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      return `${String(h12).padStart(2, '0')}:${minutos} ${ampm}`;
+    }
+
+    // Función para formatear precio
+    function formatearPrecio(precio) {
+      return new Intl.NumberFormat('es-CR').format(precio);
+    }
+
+    // Filtro de búsqueda
+    document.getElementById('buscarViaje').addEventListener('input', function() {
+      const filtro = this.value.toLowerCase();
+      const filas = document.querySelectorAll('#tablaViajes tr');
+      
+      filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        fila.style.display = texto.includes(filtro) ? '' : 'none';
+      });
+    });
+
+    // Filtro por estado
+    document.getElementById('filtroEstado').addEventListener('change', function() {
+      const estadoSeleccionado = this.value;
+      const filas = document.querySelectorAll('#tablaViajes tr');
+      
+      filas.forEach(fila => {
+        if (estadoSeleccionado === 'Todos los estados') {
+          fila.style.display = '';
+        } else {
+          const badge = fila.querySelector('.badge');
+          if (badge && badge.textContent === estadoSeleccionado) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    // Filtro por ruta
+    document.getElementById('filtroRuta').addEventListener('change', function() {
+      const rutaSeleccionada = this.value;
+      const filas = document.querySelectorAll('#tablaViajes tr');
+      
+      filas.forEach(fila => {
+        if (rutaSeleccionada === 'Todas las rutas') {
+          fila.style.display = '';
+        } else {
+          const ruta = fila.cells[1].textContent;
+          if (ruta === rutaSeleccionada) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

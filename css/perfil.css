@@ -1,0 +1,97 @@
+body {
+    background-color: #7e5959;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: #7e5959;
+    border-bottom: 1px solid #333;
+}
+
+.close-btn {
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: white;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.tabs {
+    display: flex;
+    overflow-x: auto;
+    background: #7e5959;
+    border-bottom: 1px solid #333;
+}
+
+.tab {
+    padding: 15px 20px;
+    white-space: nowrap;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.tab.active {
+    color: white;
+    border-bottom: 2px solid white;
+}
+
+
+.profile-section {
+    padding: 20px;
+}
+
+.profile-section h1 {
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+
+
+.profile-photo {
+    position: relative;
+    width: 90px;
+    margin-bottom: 30px;
+}
+
+.profile-photo img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #444;
+}
+
+.edit-photo {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #111;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: white;
+    cursor: pointer;
+}
+
+
+.item {
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+
+.label {
+    font-size: 15px;
+    color: #bbb;
+}
+
+.value {
+    font-size: 17px;
+    margin-top: 5px;
+    color: white;
+}

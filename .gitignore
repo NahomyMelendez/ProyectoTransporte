@@ -1,0 +1,24 @@
+# Ignorar dependencias
+node_modules/
+
+# Ignorar binarios de Electron
+electron/
+electron-builder.yml
+electron-builder.json
+**/dist/
+**/out/
+**/release/
+*.exe
+*.dll
+*.app
+
+# Logs
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de IDEs
+.vscode/
+.idea/

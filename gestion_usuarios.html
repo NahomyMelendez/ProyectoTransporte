@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaLink Jiménez - Gestión de Usuarios</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio">Panel Principal</a></li>
+        <li><a href="#" id="gestionViajes">Gestión de Viajes</a></li>
+        <li><a href="#" id="gestionUsuarios" class="active">Gestión de Usuarios</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <span class="admin-badge">Administrador</span>
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+
+  <main>
+    
+    <!-- VISTA GESTIÓN DE USUARIOS -->
+    <section id="vistaUsuarios" class="vista-activa">
+      <div class="seccion-header">
+        <h1>Gestión de Usuarios</h1>
+        <button class="btn-principal" id="btnAgregarUsuario">+ Agregar Usuario</button>
+      </div>
+
+      <div class="filtros">
+        <input type="text" placeholder="Buscar usuario..." class="input-buscar" id="buscarUsuario">
+        <select class="select-filtro" id="filtroRol">
+          <option>Todos los roles</option>
+          <option>Administradores</option>
+          <option>Usuarios</option>
+        </select>
+        <select class="select-filtro" id="filtroEstado">
+          <option>Todos los estados</option>
+          <option>Activos</option>
+          <option>Inactivos</option>
+        </select>
+      </div>
+
+      <div class="tabla-container">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaUsuarios">
+            <tr>
+              <td>#001</td>
+              <td>Diego Salazar Campos</td>
+              <td>user@lancha.com</td>
+              <td>8888-8888</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarUsuario(1)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>María González</td>
+              <td>maria.g@example.com</td>
+              <td>8777-7777</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarUsuario(2)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>Administrador</td>
+              <td>admin@lancha.com</td>
+              <td>8999-9999</td>
+              <td><span class="badge badge-primary">Admin</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarUsuario(3)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#004</td>
+              <td>Carlos Ramírez</td>
+              <td>carlos.r@example.com</td>
+              <td>8666-6666</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-success">Activo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarUsuario(4)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+              </td>
+            </tr>
+            <tr>
+              <td>#005</td>
+              <td>Ana Rodríguez</td>
+              <td>ana.rod@example.com</td>
+              <td>8555-5555</td>
+              <td><span class="badge badge-info">Usuario</span></td>
+              <td><span class="badge badge-danger">Inactivo</span></td>
+              <td>
+                <button class="btn-accion btn-editar" onclick="editarUsuario(5)">✎</button>
+                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Modal para agregar/editar usuario -->
+  <div id="modalUsuario" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="tituloModal">Agregar Nuevo Usuario</h2>
+      <form id="formUsuario">
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" id="nombre" required placeholder="Nombre completo del usuario">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="correo" required placeholder="correo@ejemplo.com">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" id="telefono" required placeholder="8888-8888">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" id="password" required placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="form-group">
+          <label>Rol</label>
+          <select id="rol" required>
+            <option value="Usuario">Usuario</option>
+            <option value="Administrador">Administrador</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select id="estado" required>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-principal">Guardar Usuario</button>
+      </form>
+    </div>
+  </div>
+
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    // Navegación
+    document.getElementById('inicio').addEventListener('click', () => {
+      ipcRenderer.send('go-admin');
+    });
+
+    document.getElementById('gestionViajes').addEventListener('click', () => {
+      ipcRenderer.send('abrir-gestion-viajes');
+    });
+
+    document.getElementById('gestionUsuarios').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    // Cerrar sesión
+    document.getElementById('logout').addEventListener('click', () => {
+      ipcRenderer.send('logout');
+    });
+
+    // Modal
+    const modalUsuario = document.getElementById('modalUsuario');
+
+    document.getElementById('btnAgregarUsuario').addEventListener('click', () => {
+      document.getElementById('tituloModal').textContent = 'Agregar Nuevo Usuario';
+      document.getElementById('formUsuario').reset();
+      modalUsuario.style.display = 'block';
+    });
+
+    // Cerrar modal
+    document.querySelector('.close').addEventListener('click', () => {
+      modalUsuario.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target === modalUsuario) {
+        modalUsuario.style.display = 'none';
+      }
+    });
+
+    // Formulario
+    document.getElementById('formUsuario').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const nombre = document.getElementById('nombre').value;
+      const correo = document.getElementById('correo').value;
+      const telefono = document.getElementById('telefono').value;
+      const rol = document.getElementById('rol').value;
+      const estado = document.getElementById('estado').value;
+
+      // Generar nuevo ID
+      const tablaUsuarios = document.getElementById('tablaUsuarios');
+      const numUsuarios = tablaUsuarios.rows.length + 1;
+      const nuevoId = `#${String(numUsuarios).padStart(3, '0')}`;
+
+      // Determinar badges
+      const rolBadgeClass = rol === 'Administrador' ? 'badge-primary' : 'badge-info';
+      const rolBadgeText = rol === 'Administrador' ? 'Admin' : 'Usuario';
+      const estadoBadgeClass = estado === 'Activo' ? 'badge-success' : 'badge-danger';
+
+      // Crear nueva fila
+      const nuevaFila = `
+        <tr>
+          <td>${nuevoId}</td>
+          <td>${nombre}</td>
+          <td>${correo}</td>
+          <td>${telefono}</td>
+          <td><span class="badge ${rolBadgeClass}">${rolBadgeText}</span></td>
+          <td><span class="badge ${estadoBadgeClass}">${estado}</span></td>
+          <td>
+            <button class="btn-accion btn-editar" onclick="editarUsuario(${numUsuarios})">✎</button>
+            <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
+          </td>
+        </tr>
+      `;
+
+      tablaUsuarios.insertAdjacentHTML('beforeend', nuevaFila);
+      modalUsuario.style.display = 'none';
+      alert('Usuario agregado exitosamente');
+    });
+
+    // Función para editar usuario
+    function editarUsuario(id) {
+      document.getElementById('tituloModal').textContent = 'Editar Usuario';
+      modalUsuario.style.display = 'block';
+      // Aquí podrías cargar los datos del usuario para editarlos
+      alert(`Editando usuario #${id}. Función en desarrollo.`);
+    }
+
+    // Función para eliminar usuario
+    function eliminarUsuario(btn) {
+      if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+        btn.closest('tr').remove();
+        alert('Usuario eliminado exitosamente');
+      }
+    }
+
+    // Filtro de búsqueda
+    document.getElementById('buscarUsuario').addEventListener('input', function() {
+      const filtro = this.value.toLowerCase();
+      const filas = document.querySelectorAll('#tablaUsuarios tr');
+      
+      filas.forEach(fila => {
+        const texto = fila.textContent.toLowerCase();
+        fila.style.display = texto.includes(filtro) ? '' : 'none';
+      });
+    });
+
+    // Filtro por rol
+    document.getElementById('filtroRol').addEventListener('change', function() {
+      const rolSeleccionado = this.value;
+      const filas = document.querySelectorAll('#tablaUsuarios tr');
+      
+      filas.forEach(fila => {
+        if (rolSeleccionado === 'Todos los roles') {
+          fila.style.display = '';
+        } else {
+          const badge = fila.cells[4].querySelector('.badge');
+          const rolTexto = badge.textContent === 'Admin' ? 'Administradores' : 'Usuarios';
+          if (rolTexto === rolSeleccionado) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    // Filtro por estado
+    document.getElementById('filtroEstado').addEventListener('change', function() {
+      const estadoSeleccionado = this.value;
+      const filas = document.querySelectorAll('#tablaUsuarios tr');
+      
+      filas.forEach(fila => {
+        if (estadoSeleccionado === 'Todos los estados') {
+          fila.style.display = '';
+        } else {
+          const badge = fila.cells[5].querySelector('.badge');
+          if (badge && badge.textContent === estadoSeleccionado) {
+            fila.style.display = '';
+          } else {
+            fila.style.display = 'none';
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

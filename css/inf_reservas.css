@@ -1,0 +1,187 @@
+body { 
+  font-family: 'EB Garamond', serif;
+  background: url("../archivos/mercadillo-acuarela.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.25);
+  z-index: -1;
+}
+
+
+header {
+  background-color: #9e505480; 
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+
+.menu ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.menu a:hover {
+  color: #ffcc00;
+}
+
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.foto-perfil-home {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s;
+  object-fit: cover;
+}
+
+.foto-perfil-home:hover {
+  transform: scale(1.1);
+}
+
+#logout {
+  background-color: #9e505480;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#logout:hover {
+  background-color: #ee636a80;
+}
+
+
+.contenedor-reserva {
+  width: 90%;
+  max-width: 750px;
+  margin: 40px auto;
+}
+
+
+h1 {
+  text-align: center;
+  color: #6a3336;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+
+.tarjeta-reserva {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin-top: 25px;
+  border-top: 6px solid #9e5054; 
+}
+
+.tarjeta-reserva h2 {
+  text-align: center;
+  color: #6a3336;
+  font-size: 1.5rem;
+}
+
+
+.info-reserva {
+  background: rgba(255, 255, 255, 0.75);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.info-reserva p {
+  margin: 7px 0;
+  font-size: 1.1rem;
+}
+
+
+.formulario {
+  margin-top: 25px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+  color: #6a3336;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b38f8f;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  border-color: #9e5054;
+  outline: none;
+}
+
+
+.btn-confirmar {
+  width: 100%;
+  padding: 14px;
+  background: #9e5054d0;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-confirmar:hover {
+  background: #ee636ad0;
+}

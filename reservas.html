@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AquaLink Jiménez - Reservas</title>
+  <link rel="stylesheet" href="css/reservas.css">
+ 
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <h2>AquaLink Jiménez</h2>
+    </div>
+
+    <nav class="menu">
+      <ul>
+        <li><a href="#" id="inicio">Inicio</a></li>
+        <li><a href="#" id="reservas">Reservas</a></li>
+      </ul>
+    </nav>
+
+    <div class="acciones">
+      <img src="archivos/perfil.png" id="btnPerfil" class="foto-perfil-home">
+      <button id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+
+
+  <main class="contenedor-reservas">
+
+    <!-- TARJETA 1 -->
+    <div class="res-card">
+      <img src="archivos/puerto_jimenez.jpeg" class="res-img">
+
+      <div class="res-info">
+        <h3>Puerto Jiménez → Golfito</h3>
+        <p><strong>Salida:</strong> 06:15 AM</p>
+        <p><strong>Tipo:</strong> Ida</p>
+        <p><strong>Precio:</strong> ₡3500</p>
+      </div>
+
+      <button class="btn-reservar" onclick="abrirInfoReserva()">Reservar</button>
+    </div>
+
+    <!-- TARJETA 2 -->
+    <div class="res-card">
+      <img src="archivos/Principal2022MuelleGolfito.jpg" class="res-img">
+
+      <div class="res-info">
+        <h3>Golfito → Puerto Jiménez</h3>
+        <p><strong>Salida:</strong> 10:00 AM</p>
+        <p><strong>Tipo:</strong> Vuelta</p>
+        <p><strong>Precio:</strong> ₡3500</p>
+      </div>
+
+      <button class="btn-reservar" onclick="abrirInfoReserva()">Reservar</button>
+    </div>
+
+  </main>
+
+  <script>
+    const { ipcRenderer } = require("electron");
+
+    // Navegación
+    document.getElementById("inicio").addEventListener("click", () => {
+      ipcRenderer.send("abrir-inicio");
+    });
+
+    document.getElementById("reservas").addEventListener("click", () => {
+      ipcRenderer.send("abrir-reservas");
+    });
+
+    document.getElementById("btnPerfil").addEventListener("click", () => {
+      ipcRenderer.send("open-profile");
+    });
+
+    document.getElementById("logout").addEventListener("click", () => {
+      ipcRenderer.send("logout");
+    });
+
+    // Abrir detalle de reserva
+    function abrirInfoReserva() {
+      ipcRenderer.send("abrir-inf-reservas");
+    }
+  </script>
+
+</body>
+</html>

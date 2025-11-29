@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AquaLink Jiménez - Registro</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/register.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="archivos/barco.webp" alt="logo" class="logo-img" />
+      <div class="logo">AquaLink Jiménez</div>
+      <button id="learnMore">Más información</button>
+    </div>
+
+    <div class="right">
+      <h2>Crear cuenta</h2>
+      <p>Regístrate para comenzar a viajar con AquaLink Jiménez</p>
+
+      <form id="registerForm">
+        <input type="text" id="fullname" placeholder="Nombre completo" required />
+        <input type="email" id="email" placeholder="Correo electrónico" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <input type="password" id="confirmPassword" placeholder="Confirmar contraseña" required />
+
+        <button type="submit">Registrarse</button>
+      </form>
+
+      <p class="bottom-text">¿Ya tienes una cuenta? <a id="goLogin">Inicia sesión</a></p>
+    </div>
+  </div>
+
+  <script>
+    const { ipcRenderer } = require('electron');
+
+    // --- Registro ---
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const pass = document.getElementById('password').value;
+      const confirm = document.getElementById('confirmPassword').value;
+
+      if (pass !== confirm) {
+        alert('❌ Las contraseñas no coinciden');
+        return;
+      }
+
+      alert('✅ Registro exitoso');
+      ipcRenderer.send('go-login'); 
+    });
+
+    // --- Volver al login ---
+    document.getElementById('goLogin').addEventListener('click', () => {
+      ipcRenderer.send('go-login'); 
+    });
+  </script>
+</body>
+</html>

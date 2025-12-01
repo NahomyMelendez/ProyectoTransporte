@@ -1,8 +1,41 @@
+// Ruta para login
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  const usuarios = leerJSON("usuarios");
+  const user = usuarios.find(u => u.correo === email && u.password === password);
+  if (user) {
+    res.json({ ok: true, rol: user.rol, nombre: user.nombre });
+  } else {
+    res.status(401).json({ ok: false, error: "Credenciales incorrectas" });
+  }
+});
+
+// Ruta para registro
+app.post("/register", (req, res) => {
+  const { nombre, correo, password } = req.body;
+  const usuarios = leerJSON("usuarios");
+  if (usuarios.find(u => u.correo === correo)) {
+    return res.status(400).json({ ok: false, error: "Correo ya registrado" });
+  }
+  const nuevo = {
+    id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
+    nombre,
+    correo,
+    telefono: "",
+    rol: "usuario",
+    estado: "activo",
+    password
+  };
+  usuarios.push(nuevo);
+  fs.writeFileSync(path.join(__dirname, "data", "usuarios.json"), JSON.stringify(usuarios, null, 2));
+  res.json({ ok: true });
+});
 // server.js
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const pool = require("./db"); // conexión a PostgreSQL
+const fs = require("fs");
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,20 +48,24 @@ app.get("/", (req, res) => {
   res.send("Servidor de transporte acuático funcionando ✅");
 });
 
-// Ruta para probar la conexión a la base de datos
-app.get("/test-db", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    console.log("✅ Consulta a PostgreSQL correcta:", result.rows[0]);
-    res.json({
-      ok: true,
-      message: "Conexión a PostgreSQL exitosa",
-      time: result.rows[0],
-    });
-  } catch (err) {
-    console.error("❌ Error en /test-db:", err);
-    res.status(500).json({ ok: false, error: err.message });
-  }
+
+// Utilidad para leer JSON
+function leerJSON(nombre) {
+  const filePath = path.join(__dirname, "data", nombre + ".json");
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+// Rutas para obtener datos
+app.get("/usuarios", (req, res) => {
+  res.json(leerJSON("usuarios"));
+});
+
+app.get("/viajes", (req, res) => {
+  res.json(leerJSON("viajes"));
+});
+
+app.get("/reservas", (req, res) => {
+  res.json(leerJSON("reservas"));
 });
 
 // Levantar el servidor

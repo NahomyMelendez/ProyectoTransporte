@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "usuario": "Diego Salazar",
+    "viaje": 1,
+    "fecha": "2025-11-27T08:30:00",
+    "estado": "confirmada"
+  },
+  {
+    "id": 2,
+    "usuario": "María González",
+    "viaje": 2,
+    "fecha": "2025-11-27T07:15:00",
+    "estado": "cancelada"
+  },
+  {
+    "id": 3,
+    "usuario": "Usuario Demo",
+    "viaje": 1,
+    "fecha": "2025-11-29T02:57:05.737Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 4,
+    "usuario": "Usuario Demo",
+    "viaje": 1,
+    "fecha": "2025-11-29T02:59:58.159Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 5,
+    "usuario": "Usuario Demo",
+    "viaje": 1,
+    "fecha": "2025-11-29T03:01:31.872Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 6,
+    "usuario": "Usuario Demo",
+    "viaje": 2,
+    "fecha": "2025-11-29T03:02:35.977Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 7,
+    "usuario": "Usuario Demo",
+    "viaje": 2,
+    "fecha": "2025-11-29T03:02:45.078Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 8,
+    "usuario": "Usuario Demo",
+    "viaje": 2,
+    "fecha": "2025-11-29T03:03:56.819Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 9,
+    "usuario": "Usuario Demo",
+    "viaje": 1,
+    "fecha": "2025-11-29T03:10:16.271Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 10,
+    "usuario": "Usuario Demo",
+    "viaje": 1,
+    "fecha": "2025-11-29T03:15:31.668Z",
+    "estado": "confirmada"
+  },
+  {
+    "id": 11,
+    "usuario": "Usuario Demo",
+    "viaje": 2,
+    "fecha": "2025-11-29T03:16:40.562Z",
+    "estado": "confirmada"
+  }
+]

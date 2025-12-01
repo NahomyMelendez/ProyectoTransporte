@@ -397,20 +397,65 @@
       modalUsuario.style.display = 'none';
     });
 
-    // Acciones de tabla
-    document.querySelectorAll('.btn-editar').forEach(btn => {
-      btn.addEventListener('click', function() {
-        alert('Función de edición en desarrollo');
-      });
-    });
+    // --- CARGA DE DATOS DESDE JSON LOCAL ---
+    const fs = require('fs');
+    const path = require('path');
 
-    document.querySelectorAll('.btn-eliminar').forEach(btn => {
-      btn.addEventListener('click', function() {
-        if (confirm('¿Está seguro de que desea eliminar este elemento?')) {
-          this.closest('tr').remove();
-        }
+    function cargarViajes() {
+      const filePath = path.join(__dirname, 'data', 'viajes.json');
+      let viajes = [];
+      try {
+        viajes = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      } catch (err) {}
+      const tbody = document.getElementById('tablaViajes');
+      tbody.innerHTML = '';
+      viajes.forEach(v => {
+        tbody.innerHTML += `
+          <tr>
+            <td>#${v.id.toString().padStart(3, '0')}</td>
+            <td>${v.ruta}</td>
+            <td>${v.horario}</td>
+            <td>₡${v.precio.toLocaleString()}</td>
+            <td>${v.ocupados}/${v.capacidad}</td>
+            <td><span class="badge badge-${v.estado === 'activo' ? 'success' : v.estado === 'pendiente' ? 'warning' : 'danger'}">${v.estado.charAt(0).toUpperCase() + v.estado.slice(1)}</span></td>
+            <td>
+              <button class="btn-accion btn-editar">✎</button>
+              <button class="btn-accion btn-eliminar">🗑</button>
+            </td>
+          </tr>
+        `;
       });
-    });
+    }
+
+    function cargarUsuarios() {
+      const filePath = path.join(__dirname, 'data', 'usuarios.json');
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      } catch (err) {}
+      const tbody = document.getElementById('tablaUsuarios');
+      tbody.innerHTML = '';
+      usuarios.forEach(u => {
+        tbody.innerHTML += `
+          <tr>
+            <td>#${u.id.toString().padStart(3, '0')}</td>
+            <td>${u.nombre}</td>
+            <td>${u.correo}</td>
+            <td>${u.telefono}</td>
+            <td><span class="badge badge-${u.rol === 'admin' ? 'primary' : 'info'}">${u.rol.charAt(0).toUpperCase() + u.rol.slice(1)}</span></td>
+            <td><span class="badge badge-success">${u.estado.charAt(0).toUpperCase() + u.estado.slice(1)}</span></td>
+            <td>
+              <button class="btn-accion btn-editar">✎</button>
+              <button class="btn-accion btn-eliminar">🗑</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // Cargar datos al iniciar
+    cargarViajes();
+    cargarUsuarios();
   </script>
 
 </body>

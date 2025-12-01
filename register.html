@@ -36,18 +36,43 @@
     const { ipcRenderer } = require('electron');
 
     // --- Registro ---
+    const fs = require('fs');
+    const path = require('path');
     document.getElementById('registerForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      const pass = document.getElementById('password').value;
+      const nombre = document.getElementById('fullname').value.trim();
+      const correo = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
       const confirm = document.getElementById('confirmPassword').value;
 
-      if (pass !== confirm) {
+      if (password !== confirm) {
         alert('❌ Las contraseñas no coinciden');
         return;
       }
 
+      // Leer usuarios.json y agregar el nuevo usuario
+      const filePath = path.join(__dirname, 'data', 'usuarios.json');
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      } catch (err) {}
+      if (usuarios.find(u => u.correo === correo)) {
+        alert('Correo ya registrado');
+        return;
+      }
+      const nuevo = {
+        id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
+        nombre,
+        correo,
+        telefono: '',
+        rol: 'usuario',
+        estado: 'activo',
+        password
+      };
+      usuarios.push(nuevo);
+      fs.writeFileSync(filePath, JSON.stringify(usuarios, null, 2));
       alert('✅ Registro exitoso');
-      ipcRenderer.send('go-login'); 
+      ipcRenderer.send('go-login');
     });
 
     // --- Volver al login ---

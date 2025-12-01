@@ -39,15 +39,22 @@
     const { ipcRenderer } = require('electron');
 
     // --- Manejo del login ---
+    const fs = require('fs');
+    const path = require('path');
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
 
-      if (email === 'admin@lancha.com' && password === '1234') {
-        ipcRenderer.send('login-success', 'admin');
-      } else if (email === 'user@lancha.com' && password === '1234') {
-        ipcRenderer.send('login-success', 'user');
+      // Leer usuarios.json y validar
+      const filePath = path.join(__dirname, 'data', 'usuarios.json');
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      } catch (err) {}
+      const user = usuarios.find(u => u.correo === email && u.password === password);
+      if (user) {
+        ipcRenderer.send('login-success', user.rol);
       } else {
         alert('Credenciales incorrectas');
       }

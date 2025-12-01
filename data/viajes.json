@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "ruta": "Puerto Jiménez → Golfito",
+    "horario": "06:15 AM",
+    "precio": 3500,
+    "capacidad": 50,
+    "ocupados": 40,
+    "estado": "activo"
+  },
+  {
+    "id": 2,
+    "ruta": "Golfito → Puerto Jiménez",
+    "horario": "10:00 AM",
+    "precio": 3500,
+    "capacidad": 50,
+    "ocupados": 35,
+    "estado": "activo"
+  }
+]

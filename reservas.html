@@ -31,33 +31,7 @@
 
   <main class="contenedor-reservas">
 
-    <!-- TARJETA 1 -->
-    <div class="res-card">
-      <img src="archivos/puerto_jimenez.jpeg" class="res-img">
-
-      <div class="res-info">
-        <h3>Puerto Jiménez → Golfito</h3>
-        <p><strong>Salida:</strong> 06:15 AM</p>
-        <p><strong>Tipo:</strong> Ida</p>
-        <p><strong>Precio:</strong> ₡3500</p>
-      </div>
-
-      <button class="btn-reservar" onclick="abrirInfoReserva()">Reservar</button>
-    </div>
-
-    <!-- TARJETA 2 -->
-    <div class="res-card">
-      <img src="archivos/Principal2022MuelleGolfito.jpg" class="res-img">
-
-      <div class="res-info">
-        <h3>Golfito → Puerto Jiménez</h3>
-        <p><strong>Salida:</strong> 10:00 AM</p>
-        <p><strong>Tipo:</strong> Vuelta</p>
-        <p><strong>Precio:</strong> ₡3500</p>
-      </div>
-
-      <button class="btn-reservar" onclick="abrirInfoReserva()">Reservar</button>
-    </div>
+    <div id="reservasContainer"></div>
 
   </main>
 
@@ -81,9 +55,90 @@
       ipcRenderer.send("logout");
     });
 
-    // Abrir detalle de reserva
-    function abrirInfoReserva() {
-      ipcRenderer.send("abrir-inf-reservas");
+
+    // --- CARGA DE RESERVAS DESDE JSON ---
+    const fs = require('fs');
+    const path = require('path');
+    const reservasContainer = document.getElementById('reservasContainer');
+    const viajesPath = path.join(__dirname, 'data', 'viajes.json');
+    let viajes = [];
+    try {
+      viajes = JSON.parse(fs.readFileSync(viajesPath, 'utf8'));
+    } catch (err) {}
+
+    reservasContainer.innerHTML = '';
+    viajes.forEach(v => {
+      reservasContainer.innerHTML += `
+        <div class="res-card">
+          <img src="archivos/${v.id === 1 ? 'puerto_jimenez.jpeg' : 'Principal2022MuelleGolfito.jpg'}" class="res-img">
+          <div class="res-info">
+            <h3>${v.ruta}</h3>
+            <p><strong>Salida:</strong> ${v.horario}</p>
+            <p><strong>Tipo:</strong> ${v.ruta.includes('Golfito') ? (v.ruta.startsWith('Puerto') ? 'Ida' : 'Vuelta') : ''}</p>
+            <p><strong>Precio:</strong> ₡${v.precio}</p>
+          </div>
+          <button class="btn-reservar" onclick="reservarViaje(${v.id})">Reservar</button>
+        </div>
+      `;
+    });
+
+    window.reservarViaje = function(idViaje) {
+      const reservasPath = path.join(__dirname, 'data', 'reservas.json');
+      let reservas = [];
+      try {
+        reservas = JSON.parse(fs.readFileSync(reservasPath, 'utf8'));
+      } catch (err) {}
+      const viaje = viajes.find(v => v.id === idViaje);
+      const nuevaReserva = {
+        id: reservas.length ? reservas[reservas.length - 1].id + 1 : 1,
+        usuario: 'Usuario Demo',
+        viaje: idViaje,
+        fecha: new Date().toISOString(),
+        estado: 'confirmada'
+      };
+      reservas.push(nuevaReserva);
+      fs.writeFileSync(reservasPath, JSON.stringify(reservas, null, 2));
+
+      // --- Generar PDF tipo boucher con QR real ---
+      const PDFDocument = require('pdfkit');
+      const QRCode = require('qrcode');
+      const { shell } = require('electron');
+      const pdfPath = path.join(__dirname, 'data', `boucher_reserva_${nuevaReserva.id}.pdf`);
+      const doc = new PDFDocument({ size: 'A6', margin: 20 });
+      const stream = fs.createWriteStream(pdfPath);
+      doc.pipe(stream);
+
+      // Fondo y estilo
+      doc.rect(0, 0, doc.page.width, doc.page.height).fill('#e3f2fd');
+      doc.fillColor('#1565c0').fontSize(22).font('Helvetica-Bold').text('AquaLink Jiménez', { align: 'center' });
+      doc.moveDown(0.5);
+      doc.fillColor('#263238').fontSize(16).font('Helvetica-Bold').text('Boucher de Reserva', { align: 'center' });
+      doc.moveDown(1);
+      doc.fontSize(12).font('Helvetica').fillColor('#263238');
+      doc.text(`Reserva #: ${nuevaReserva.id}`);
+      doc.text(`Usuario: ${nuevaReserva.usuario}`);
+      doc.text(`Ruta: ${viaje.ruta}`);
+      doc.text(`Horario: ${viaje.horario}`);
+      doc.text(`Precio: ₡${viaje.precio}`);
+      doc.text(`Fecha de reserva: ${new Date(nuevaReserva.fecha).toLocaleString()}`);
+      doc.text(`Estado: ${nuevaReserva.estado}`);
+      doc.moveDown(1);
+      doc.fontSize(10).fillColor('#607d8b').text('¡Gracias por reservar con nosotros!', { align: 'center' });
+
+      // Generar QR y agregarlo al PDF
+      const qrData = `Reserva:${nuevaReserva.id}|Usuario:${nuevaReserva.usuario}|Ruta:${viaje.ruta}|Horario:${viaje.horario}|Precio:${viaje.precio}`;
+      QRCode.toDataURL(qrData, { width: 120 }, (err, url) => {
+        if (!err) {
+          // Extraer base64
+          const base64 = url.replace(/^data:image\/png;base64,/, "");
+          const buffer = Buffer.from(base64, 'base64');
+          doc.image(buffer, doc.page.width / 2 - 40, doc.y, { width: 80, height: 80 });
+        }
+        doc.end();
+      });
+      stream.on('finish', () => {
+        shell.openPath(pdfPath);
+      });
     }
   </script>
 

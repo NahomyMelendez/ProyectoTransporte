@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "nombre": "Diego Salazar Campos",
+    "correo": "user@lancha.com",
+    "telefono": "8888-8888",
+    "rol": "usuario",
+    "estado": "activo",
+    "password": "1234"
+  },
+  {
+    "id": 2,
+    "nombre": "Administrador",
+    "correo": "admin@lancha.com",
+    "telefono": "8999-9999",
+    "rol": "admin",
+    "estado": "activo",
+    "password": "1234"
+  },
+  {
+    "id": 3,
+    "nombre": "Aaaaaaa",
+    "correo": "aaaa@gmail.com",
+    "telefono": "",
+    "rol": "usuario",
+    "estado": "activo",
+    "password": "1234"
+  },
+  {
+    "id": 4,
+    "nombre": "qwe",
+    "correo": "Andrey@gmail.com",
+    "telefono": "",
+    "rol": "usuario",
+    "estado": "activo",
+    "password": "1234"
+  }
+]

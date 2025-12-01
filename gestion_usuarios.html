@@ -66,68 +66,7 @@
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody id="tablaUsuarios">
-            <tr>
-              <td>#001</td>
-              <td>Diego Salazar Campos</td>
-              <td>user@lancha.com</td>
-              <td>8888-8888</td>
-              <td><span class="badge badge-info">Usuario</span></td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarUsuario(1)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#002</td>
-              <td>María González</td>
-              <td>maria.g@example.com</td>
-              <td>8777-7777</td>
-              <td><span class="badge badge-info">Usuario</span></td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarUsuario(2)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#003</td>
-              <td>Administrador</td>
-              <td>admin@lancha.com</td>
-              <td>8999-9999</td>
-              <td><span class="badge badge-primary">Admin</span></td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarUsuario(3)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#004</td>
-              <td>Carlos Ramírez</td>
-              <td>carlos.r@example.com</td>
-              <td>8666-6666</td>
-              <td><span class="badge badge-info">Usuario</span></td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarUsuario(4)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#005</td>
-              <td>Ana Rodríguez</td>
-              <td>ana.rod@example.com</td>
-              <td>8555-5555</td>
-              <td><span class="badge badge-info">Usuario</span></td>
-              <td><span class="badge badge-danger">Inactivo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarUsuario(5)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-              </td>
-            </tr>
-          </tbody>
+          <tbody id="tablaUsuarios"></tbody>
         </table>
       </div>
     </section>
@@ -218,46 +157,79 @@
       }
     });
 
-    // Formulario
+    // --- CARGA Y GESTIÓN DE USUARIOS DESDE JSON ---
+    const fs = require('fs');
+    const path = require('path');
+    const usuariosPath = path.join(__dirname, 'data', 'usuarios.json');
+    const tablaUsuarios = document.getElementById('tablaUsuarios');
+
+    function cargarUsuarios() {
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+      } catch (err) {}
+      tablaUsuarios.innerHTML = '';
+      usuarios.forEach(u => {
+        const rolBadgeClass = u.rol === 'admin' ? 'badge-primary' : 'badge-info';
+        const rolBadgeText = u.rol === 'admin' ? 'Admin' : 'Usuario';
+        const estadoBadgeClass = u.estado === 'activo' ? 'badge-success' : 'badge-danger';
+        tablaUsuarios.innerHTML += `
+          <tr>
+            <td>#${u.id.toString().padStart(3, '0')}</td>
+            <td>${u.nombre}</td>
+            <td>${u.correo}</td>
+            <td>${u.telefono}</td>
+            <td><span class="badge ${rolBadgeClass}">${rolBadgeText}</span></td>
+            <td><span class="badge ${estadoBadgeClass}">${u.estado.charAt(0).toUpperCase() + u.estado.slice(1)}</span></td>
+            <td>
+              <button class="btn-accion btn-editar" onclick="editarUsuario(${u.id})">✎</button>
+              <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(${u.id})">🗑</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    cargarUsuarios();
+
     document.getElementById('formUsuario').addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const nombre = document.getElementById('nombre').value;
       const correo = document.getElementById('correo').value;
       const telefono = document.getElementById('telefono').value;
-      const rol = document.getElementById('rol').value;
-      const estado = document.getElementById('estado').value;
-
-      // Generar nuevo ID
-      const tablaUsuarios = document.getElementById('tablaUsuarios');
-      const numUsuarios = tablaUsuarios.rows.length + 1;
-      const nuevoId = `#${String(numUsuarios).padStart(3, '0')}`;
-
-      // Determinar badges
-      const rolBadgeClass = rol === 'Administrador' ? 'badge-primary' : 'badge-info';
-      const rolBadgeText = rol === 'Administrador' ? 'Admin' : 'Usuario';
-      const estadoBadgeClass = estado === 'Activo' ? 'badge-success' : 'badge-danger';
-
-      // Crear nueva fila
-      const nuevaFila = `
-        <tr>
-          <td>${nuevoId}</td>
-          <td>${nombre}</td>
-          <td>${correo}</td>
-          <td>${telefono}</td>
-          <td><span class="badge ${rolBadgeClass}">${rolBadgeText}</span></td>
-          <td><span class="badge ${estadoBadgeClass}">${estado}</span></td>
-          <td>
-            <button class="btn-accion btn-editar" onclick="editarUsuario(${numUsuarios})">✎</button>
-            <button class="btn-accion btn-eliminar" onclick="eliminarUsuario(this)">🗑</button>
-          </td>
-        </tr>
-      `;
-
-      tablaUsuarios.insertAdjacentHTML('beforeend', nuevaFila);
+      const password = document.getElementById('password').value;
+      const rol = document.getElementById('rol').value.toLowerCase();
+      const estado = document.getElementById('estado').value.toLowerCase();
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+      } catch (err) {}
+      const nuevo = {
+        id: usuarios.length ? usuarios[usuarios.length - 1].id + 1 : 1,
+        nombre,
+        correo,
+        telefono,
+        password,
+        rol,
+        estado
+      };
+      usuarios.push(nuevo);
+      fs.writeFileSync(usuariosPath, JSON.stringify(usuarios, null, 2));
+      cargarUsuarios();
       modalUsuario.style.display = 'none';
       alert('Usuario agregado exitosamente');
     });
+
+    window.eliminarUsuario = function(id) {
+      let usuarios = [];
+      try {
+        usuarios = JSON.parse(fs.readFileSync(usuariosPath, 'utf8'));
+      } catch (err) {}
+      usuarios = usuarios.filter(u => u.id !== id);
+      fs.writeFileSync(usuariosPath, JSON.stringify(usuarios, null, 2));
+      cargarUsuarios();
+      alert('Usuario eliminado exitosamente');
+    }
 
     // Función para editar usuario
     function editarUsuario(id) {

@@ -67,68 +67,7 @@
               <th>Acciones</th>
             </tr>
           </thead>
-          <tbody id="tablaViajes">
-            <tr>
-              <td>#001</td>
-              <td>Puerto Jiménez → Golfito</td>
-              <td>06:15 AM</td>
-              <td>₡3,500</td>
-              <td>40/50</td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarViaje(1)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#002</td>
-              <td>Golfito → Puerto Jiménez</td>
-              <td>10:00 AM</td>
-              <td>₡3,500</td>
-              <td>35/50</td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarViaje(2)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#003</td>
-              <td>Puerto Jiménez → Golfito</td>
-              <td>02:30 PM</td>
-              <td>₡3,500</td>
-              <td>28/50</td>
-              <td><span class="badge badge-warning">Pendiente</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarViaje(3)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#004</td>
-              <td>Golfito → Puerto Jiménez</td>
-              <td>03:00 PM</td>
-              <td>₡3,500</td>
-              <td>45/50</td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarViaje(4)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-              </td>
-            </tr>
-            <tr>
-              <td>#005</td>
-              <td>Puerto Jiménez → Golfito</td>
-              <td>05:45 PM</td>
-              <td>₡3,500</td>
-              <td>20/50</td>
-              <td><span class="badge badge-success">Activo</span></td>
-              <td>
-                <button class="btn-accion btn-editar" onclick="editarViaje(5)">✎</button>
-                <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-              </td>
-            </tr>
-          </tbody>
+          <tbody id="tablaViajes"></tbody>
         </table>
       </div>
     </section>
@@ -217,47 +156,77 @@
       }
     });
 
-    // Formulario
+    // --- CARGA Y GESTIÓN DE VIAJES DESDE JSON ---
+    const fs = require('fs');
+    const path = require('path');
+    const viajesPath = path.join(__dirname, 'data', 'viajes.json');
+    const tablaViajes = document.getElementById('tablaViajes');
+
+    function cargarViajes() {
+      let viajes = [];
+      try {
+        viajes = JSON.parse(fs.readFileSync(viajesPath, 'utf8'));
+      } catch (err) {}
+      tablaViajes.innerHTML = '';
+      viajes.forEach(v => {
+        let badgeClass = v.estado === 'activo' ? 'badge-success' : v.estado === 'pendiente' ? 'badge-warning' : 'badge-danger';
+        tablaViajes.innerHTML += `
+          <tr>
+            <td>#${v.id.toString().padStart(3, '0')}</td>
+            <td>${v.ruta}</td>
+            <td>${v.horario}</td>
+            <td>₡${v.precio.toLocaleString()}</td>
+            <td>${v.ocupados}/${v.capacidad}</td>
+            <td><span class="badge ${badgeClass}">${v.estado.charAt(0).toUpperCase() + v.estado.slice(1)}</span></td>
+            <td>
+              <button class="btn-accion btn-editar" onclick="editarViaje(${v.id})">✎</button>
+              <button class="btn-accion btn-eliminar" onclick="eliminarViaje(${v.id})">🗑</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    cargarViajes();
+
     document.getElementById('formViaje').addEventListener('submit', (e) => {
       e.preventDefault();
-      
       const origen = document.getElementById('origen').value;
       const destino = document.getElementById('destino').value;
       const horario = document.getElementById('horario').value;
       const precio = document.getElementById('precio').value;
       const capacidad = document.getElementById('capacidad').value;
-      const estado = document.getElementById('estado').value;
-
-      // Generar nuevo ID
-      const tablaViajes = document.getElementById('tablaViajes');
-      const numViajes = tablaViajes.rows.length + 1;
-      const nuevoId = `#${String(numViajes).padStart(3, '0')}`;
-
-      // Determinar badge de estado
-      let badgeClass = 'badge-success';
-      if (estado === 'Inactivo') badgeClass = 'badge-danger';
-      if (estado === 'Pendiente') badgeClass = 'badge-warning';
-
-      // Crear nueva fila
-      const nuevaFila = `
-        <tr>
-          <td>${nuevoId}</td>
-          <td>${origen} → ${destino}</td>
-          <td>${convertirHora(horario)}</td>
-          <td>₡${formatearPrecio(precio)}</td>
-          <td>0/${capacidad}</td>
-          <td><span class="badge ${badgeClass}">${estado}</span></td>
-          <td>
-            <button class="btn-accion btn-editar" onclick="editarViaje(${numViajes})">✎</button>
-            <button class="btn-accion btn-eliminar" onclick="eliminarViaje(this)">🗑</button>
-          </td>
-        </tr>
-      `;
-
-      tablaViajes.insertAdjacentHTML('beforeend', nuevaFila);
+      const estado = document.getElementById('estado').value.toLowerCase();
+      let viajes = [];
+      try {
+        viajes = JSON.parse(fs.readFileSync(viajesPath, 'utf8'));
+      } catch (err) {}
+      const nuevo = {
+        id: viajes.length ? viajes[viajes.length - 1].id + 1 : 1,
+        ruta: `${origen} → ${destino}`,
+        horario: convertirHora(horario),
+        precio: Number(precio),
+        capacidad: Number(capacidad),
+        ocupados: 0,
+        estado
+      };
+      viajes.push(nuevo);
+      fs.writeFileSync(viajesPath, JSON.stringify(viajes, null, 2));
+      cargarViajes();
       modalViaje.style.display = 'none';
       alert('Viaje agregado exitosamente');
     });
+
+    window.eliminarViaje = function(id) {
+      let viajes = [];
+      try {
+        viajes = JSON.parse(fs.readFileSync(viajesPath, 'utf8'));
+      } catch (err) {}
+      viajes = viajes.filter(v => v.id !== id);
+      fs.writeFileSync(viajesPath, JSON.stringify(viajes, null, 2));
+      cargarViajes();
+      alert('Viaje eliminado exitosamente');
+    }
 
     // Función para editar viaje
     function editarViaje(id) {
